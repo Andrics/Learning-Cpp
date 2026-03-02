@@ -1,0 +1,404 @@
+Problem Name: Two Sum
+Desription:
+1. Two Sum
+Solved
+Easy
+Topics
+premium lock iconCompanies
+Hint
+
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+You can return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+
+Example 2:
+
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+
+Example 3:
+
+Input: nums = [3,3], target = 6
+Output: [0,1]
+
+ 
+
+Constraints:
+
+    2 <= nums.length <= 104
+    -109 <= nums[i] <= 109
+    -109 <= target <= 109
+    Only one valid answer exists.
+
+ 
+Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
+
+Notes: 
+Why "&"?
+In short: & means "Reference."
+
+It tells the computer: "Do not make a copy of this list. Just give me a link to the original one."
+The Problem: "Pass by Value" (No &)
+
+By default, when you pass a variable into a function, C++ makes a photocopy of it. This is called "Pass by Value."
+
+Imagine your nums vector has 1,000,000 numbers in it.
+
+    Without &: The computer has to pause, find a new empty space in memory, and copy all 1,000,000 numbers into that new space before the function can start.
+
+    The Result: This is slow and wastes a huge amount of memory (RAM).
+
+The Solution: "Pass by Reference" (With &)
+
+When you add the &, you are using "Pass by Reference."
+
+    With &: The computer just passes the memory address (like a shortcut or a URL) of the original vector.
+
+    The Result: It is instant. No matter how big the list is, passing it takes zero time.
+
+A Real World Analogy
+
+Think of the vector as a huge textbook.
+
+    Without & (Copy): You want to show me a page. You go to the photocopier, copy the entire 500-page book, and give me the copy. This takes forever!
+
+    With & (Reference): You just hand me the actual book. I look at it immediately.
+
+Why doesn't int target have an &?
+
+You might wonder why we didn't write int& target.
+
+    Vectors are big: They can hold millions of items. Copying them is expensive.
+
+    Integers are tiny: An int is extremely small (usually just 4 bytes). Copying an integer is just as fast (sometimes even faster) than creating a reference link.
+
+Summary
+
+    Use & for big things: (Vectors, Strings, large Classes) to save speed and memory.
+
+    Don't use & for small things: (int, bool, char, double) because copying them is cheap.
+
+Pro Tip:
+Since & gives the function access to the original list, the function could technically change the numbers inside it (like erasing data). If you want to use & for speed but want to make sure the function cannot change your data, you write const vector<int>& nums. This means "Look but don't touch!"
+
+
+Time Complexity is how many steps the computer has to take as the input list gets better.
+
+The Cheat Sheet: How to Find Complexity
+
+You can usually figure it out just by looking at the loops in your code.
+O(1) - Constant Time (The Best)
+
+This means "Instant." The number of steps is always the same, no matter how huge the list is.
+
+    How to spot it: No loops. Just basic math or checking a specific spot.
+
+C++
+
+// O(1) Example
+int getFirst(vector<int>& nums) {
+    return nums[0]; // Always takes 1 step, even if list has 10 billion items.
+}
+
+O(n) - Linear Time (Okay)
+
+This means "One step per item." If you have 10 items, it takes 10 steps. If you have 1,000 items, it takes 1,000 steps.
+
+    How to spot it: A single loop that goes from start to finish.
+
+C++
+
+// O(n) Example
+void printAll(vector<int>& nums) {
+    for (int i = 0; i < nums.size(); i++) { // Runs N times
+        cout << nums[i] << endl;
+    }
+}
+
+O(n2) - Quadratic Time (Slow)
+
+This means "Square the input." If you have 10 items, it takes 100 steps (10×10). If you have 1,000 items, it takes 1,000,000 steps!
+
+    How to spot it: A loop inside another loop (Nested Loops).
+
+C++
+
+// O(n^2) Example - YOUR CODE
+for (int i = 0; i < nums.size(); i++) {         // Outer loop (Runs N times)
+    for (int j = i + 1; j < nums.size(); j++) { // Inner loop (Runs ~N times)
+        // ... work ...
+    }
+}
+// Total Work = N * N = N^2
+
+3. Analyzing Your "Two Sum" Code
+
+Let's look at your solution again to prove it is O(n2).
+C++
+
+for (int i = 0; i < nums.size(); i++) { // Loop 1
+    for (int j = i + 1; j < nums.size(); j++) { // Loop 2
+        if (nums[i] + nums[j] == target) {
+             return {i, j};
+        }
+    }
+}
+
+    Outer Loop: Runs N times.
+
+    Inner Loop: For every single time the outer loop runs, the inner loop also runs (roughly) N times.
+
+    Calculation: N×N=N2.
+
+Why is this bad?
+
+    If N=5 (tiny list), 52=25 steps. (Fast!)
+
+    If N=10,000 (medium list), 10,0002=100,000,000 steps. (The computer freezes).
+
+Summary Table for Beginners
+Notation	Name	    Speed	Code Pattern
+O(1)	      Constant	    Instant	No loops.
+O(log n)      Logarithmic   Very Fast	Binary Search (cutting list in half repeatedly).
+O(n)	      Linear	    Fast	One simple loop.
+O(n2)	      Quadratic	    Slow	Two loops nested inside each other.
+
+
+
+But I want O(n)!!!
+
+You are doing great! We will take this step-by-step. The "Hash Map" solution is much faster, but the logic is actually easier to follow once you see the trick.
+The Analogy: "The Detective's Notebook"
+
+Imagine you are a detective trying to find a pair of suspects. You know their combined height must be exactly Target.
+
+The Old Way (O(n2)):
+You line up all the suspects. You pick the first one, measure them, and then compare them against every single other person in the line. Then you grab the second person and do it again. It takes forever.
+
+The New Way (O(n) - The Hash Map):
+You walk down the line of suspects just once. You carry a Notebook (this is the Hash Map).
+
+    You stop at a suspect. Let's say he is 4 feet tall.
+
+    The Target is 10.
+
+    You do simple math: "I need someone who is 6 feet tall to make a match" (10−4=6).
+
+    You check your Notebook: "Have I seen a 6-foot person before?"
+
+        NO: Write down "Saw a 4-foot person at index 0" in the notebook. Move on.
+
+        YES: You look in the notebook, see where the 6-foot person was, and BAM! You have your pair immediately.
+
+The Tool: std::unordered_map
+
+In C++, this "Notebook" is called an unordered_map. It stores two things:
+
+    Key: The number we saw (e.g., "4").
+
+    Value: Where we saw it (the index, e.g., "0").
+
+This lookup is Instant (O(1)). You don't have to search the whole notebook.
+
+///////////////////////
+ shouldn't it be notebook[i] = currentNumber; instead? Please explain
+///////////////////////
+That is a very logical assumption! In a normal array (like vector), we usually do list[index] = number.
+
+However, a Hash Map works backward compared to a normal list.
+
+Here is the golden rule of Hash Maps:
+Whatever you want to SEARCH for later must go inside the brackets [ ].
+The "Phone Book" Analogy
+
+Think of the Hash Map like a contact list on your phone.
+
+    Key (Inside []): The Person's Name (This is what you search for).
+
+    Value (After =): The Phone Number (This is what you get back).
+
+You type in "Mom" to get "555-1234". You don't type "555-1234" to find "Mom."
+Applying it to Two Sum
+
+In our problem, what are we searching for?
+
+    We are holding a number (let's say 7) and we need to find if its partner (2) exists.
+
+    We are searching for a number value, not an index.
+
+Therefore, the Number Value must be the Key (inside the brackets).
+Let's Trace the Difference
+
+Imagine our list is [2, 7] and target = 9.
+Scenario A: The RIGHT Way (notebook[number] = index)
+
+    Step 1: We see 2. We need 7. Is 7 in the notebook? No.
+
+    Action: We save 2 in the notebook.
+
+        Code: notebook[2] = 0;
+
+        Meaning: "The number 2 is located at index 0."
+
+    Step 2: We see 7. We need 2. Is 2 in the notebook?
+
+        CHECK: The computer looks for the Key 2.
+
+        RESULT: Found it! The value is 0. We return [0, 1]. Success!
+
+Scenario B: The WRONG Way (notebook[index] = number)
+
+    Step 1: We see 2. We need 7. Is 7 in the notebook? No.
+
+    Action: We save the index 0.
+
+        Code: notebook[0] = 2;
+
+        Meaning: "Index 0 holds the number 2." (This is just like a normal array!)
+
+    Step 2: We see 7. We need 2. Is 2 in the notebook?
+
+        CHECK: The computer looks for the Key 2.
+
+        RESULT: The only key in the notebook is 0. The computer says "I don't see a Key named '2'."
+
+        FAIL: You miss the answer because you stored the data backward.
+
+Summary
+
+Because we need to ask: "Do you have the number 2?", the number 2 must be the Key.
+C++
+
+// Correct: We want to find numbers later!
+notebook[currentNumber] = i; 
+
+Does that distinction make sense? We are building a "search engine" for numbers, so the numbers have to be the search terms (Keys).
+//////////////////////////////////////////
+return {notebook[numberWeNeed], i};
+
+explain this as well as it confuses me
+//////////////////////////////////////////
+This line is the "Aha!" moment of the code. It is packing up the answer and sending it back to you.
+
+Let's break it down into two parts: the syntax (the curly braces) and the logic (the map lookup).
+1. The Syntax: { ... }
+
+The function requires us to return a vector<int> (a list of integers).
+
+    Instead of writing 3 lines of code to create a list, add items, and return it...
+
+    C++ allows a shortcut: return {item1, item2};
+
+    This literally means: "Create a temporary list containing these two items and send it back immediately."
+
+2. The Logic: notebook[numberWeNeed] vs i
+
+This is where the magic happens. Remember, we found a match!
+
+    i: This is the Current Index.
+
+        We are currently standing at this spot in the list.
+
+        This is the location of the Second Number (the one we just found).
+
+    notebook[numberWeNeed]: This is the Old Index.
+
+        We are asking the notebook: "Hey, I know I need the number 2. Look in the book... where did we see it before?"
+
+        The notebook replies: "I saw the number 2 at index 0."
+
+        So, notebook[numberWeNeed] turns into 0.
+
+Let's Trace it with [2, 7]
+
+Imagine nums = [2, 7] and target = 9.
+
+Iteration 1 (i = 0):
+
+    Current Number: 2
+
+    Need: 7
+
+    Is 7 in notebook? No.
+
+    Action: Write in notebook: notebook[2] = 0.
+
+        Translation: "The number 2 is at index 0."
+
+Iteration 2 (i = 1):
+
+    Current Number: 7
+
+    Need: 2
+
+    Is 2 in notebook? YES!
+
+    The Return Line happens:
+
+        numberWeNeed is 2.
+
+        notebook[2] retrieves the value 0 (because we wrote that down in Iteration 1).
+
+        i is currently 1.
+
+The Code Translation:
+C++
+
+return { notebook[numberWeNeed], i };
+// Becomes:
+return { notebook[2], 1 };
+// Becomes:
+return { 0, 1 };
+
+So in plain English, that line says:
+"Return a list containing the index from the past (where we saw the first number) and the index from right now (where we found the second number).#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+class Solution
+{
+public:
+    vector<int> twoSum(vector<int> &nums, int target)
+    {
+        unordered_map<int, int> myMap;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            int currentNum = nums[i];
+            int findNum = target - currentNum;
+
+            if (myMap.find(findNum) != myMap.end())
+            {
+                return {myMap[findNum], i};
+            }
+            myMap[currentNum] = i;
+        }
+        return {};
+    }
+};
+
+int main()
+{
+    vector<int> nums = {2, 4, 8, 7};
+    int target = 9;
+    Solution s1;
+    vector<int> result = s1.twoSum(nums, target);
+    if (result.size() == 2)
+    {
+        cout << "[" << result[0] << "," << result[1] << "]" << endl;
+    }
+    else
+    {
+        cout << "Not Found" << endl;
+    }
+}
